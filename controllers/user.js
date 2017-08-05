@@ -20,7 +20,13 @@ var saltRounds = 10;
 router.get("/", function(req, res){
     // console.log(req.user);
     // console.log(req.isAuthenticated())
-    res.render("home", { title: "Home"});
+    res.render("register", { title: "Register"});
+});
+
+router.get("/main", function(req, res){
+    // console.log(req.user);
+    // console.log(req.isAuthenticated())
+    res.render("main", { title: "Main"});
 });
 
 router.get("/profile", authenticationMiddleware(), function(req, res) {
@@ -130,7 +136,7 @@ router.post("/register", function(req, res) {
             //creates sessions 
             console.log(user_id)
             req.logIn(user_id, function(err) {
-                res.redirect("/")
+                res.redirect("main")
             } );
     
         })
@@ -153,6 +159,7 @@ router.post("/register", function(req, res) {
   //       res.render("index", { title: "Registration Complete" });
   //     });
 });
+
 passport.serializeUser(function(user_id, done) {
   done(null, user_id);
 });
