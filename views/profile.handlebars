@@ -1,1 +1,105 @@
-<h2>Profile Page</h2>
+{{> navbar}}
+
+<div class="container">
+    <div class="row">
+        <div class="four columns">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div>
+                        <img class="text-center" src="http://s3.amazonaws.com/37assets/svn/765-default-avatar.png" width="200px" alt="">
+                    </div>
+                    <h2 id="userNameLoginName">{{ username }}</h2>
+                    <h5>Austin, TX</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="eight columns">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" id="userNameLogin">
+                        <hr>
+                    </div>
+                    <div class="row">
+                        <div class="twelve columns text-">
+                            <h4>Last Search</h4>
+                            <hr>
+                            <div class="twelve columns text-">
+                                <h5>Food</h5>
+                                    <div class="five columns thumbnail text-center">
+                                        <img class="food preference-images img-responsive" data-name="Indian" id="Indian" data-state="unclicked" src="assets/img/indian.jpeg">
+                                        <h3 class="food caption" data-name="Indian" data-state="unclicked" data-type="caption" id="captionIndian">Indian</h3>
+                                    </div>
+                                    <div class="five columns thumbnail text-center">
+                                        <img class="food preference-images img-responsive" id="American" data-name="American" data-state="unclicked" src="assets/img/american.jpeg">
+                                        <h3 class="food caption" data-name="American" data-state="unclicked" data-type="caption" id="captionAmerican">American</h3>
+                                    </div>
+                            </div>
+                            <div class="twelve columns text-">
+                                <h5>Drinks</h5>
+                                    <div class="five columns thumbnail text-center">
+                                        <img class="drinks preference-images img-responsive" id="Coffee" data-name="Coffee" data-state="unclicked" src="assets/img/coffee.jpg">
+                                        <h3 class="drinks caption" data-name="Coffee" data-state="unclicked" data-type="caption" id="captionCoffee">Coffee Bar</h3>
+                                    </div>
+                                    <div class="five columns thumbnail text-center">
+                                        <img class="drinks preference-images img-responsive" id="Brewery" data-name="Brewery" data-state="unclicked" src="assets/img/brewery.jpg">
+                                        <h3 class="drinks caption" data-name="Brewery" data-state="unclicked" data-type="caption" id="captionBrewery">Brewery</h3>
+                                    </div>
+                            </div>
+                            <div class="twelve columns text-">
+                                <h5>Events</h5>
+                                    <div class="five columns thumbnail text-center">
+                                        <img class="events preference-images img-responsive" id="Country" data-name="Country" data-state="unclicked" src="assets/img/country.jpg">
+                                        <h3 class="events caption" data-name="Country" data-state="unclicked" data-type="caption" id="captionCountry">Country</h3>
+                                    </div>
+                                    <div class="five columns thumbnail text-center">
+                                        <img class="events preference-images img-responsive" id="Sports" data-name="Sports" data-state="unclicked" src="assets/img/sports.jpeg">
+                                        <h3 class="events caption" data-name="Sports" data-state="unclicked" data-type="caption" id="captionSports">Sports</h3>
+                                    </div>
+                            </div>
+                            
+                            <br/>
+                            
+                            <button class="btn btn-site btn-lg pref-btn"><a style="color: inherit; text-decoration: none;" href="preferences.html">New Search</a></button>
+
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="twelve columns">
+                            <h4>Feedback</h4>
+                            <hr>
+
+
+                            <form>
+                                <div class="row">
+                                    <div class="six columns">
+                                        <label for="exampleEmailInput">Your email</label>
+                                        <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
+                                    </div>
+                                    <div class="six columns">
+                                        <label for="exampleRecipientInput">Reason for contacting</label>
+                                        <select class="u-full-width" id="exampleRecipientInput">
+                                            <option value="Option 1">Questions</option>
+                                            <option value="Option 2">Admiration</option>
+                                            <option value="Option 3">Can I get your number?</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <label for="exampleMessage">Message</label>
+                                <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
+                                    <label class="example-send-yourself-copy">
+                                    <input type="checkbox">
+                                    <span class="label-body">Send a copy to yourself</span>
+                                </label>
+                                <input class="button-primary" type="submit" value="Submit">
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

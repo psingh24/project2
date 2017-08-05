@@ -18,25 +18,37 @@ var saltRounds = 10;
 // Create routes
 // ----------------------------------------------------
 router.get("/", function(req, res){
-    console.log(req.user);
-    console.log(req.isAuthenticated())
+    // console.log(req.user);
+    // console.log(req.isAuthenticated())
     res.render("home", { title: "Home"});
 });
 
 router.get("/profile", authenticationMiddleware(), function(req, res) {
+    
     res.render("profile", { title: "Profile"});
 });
-
-router.post("/login", passport.authenticate(
-    "local", {
-        successRedirect: '/profile',
-        failureRedirect: '/login'
-    }
-))
 
 router.get("/login", function(req, res) {
     res.render("login", { title: "Login"});
 });
+
+
+
+router.post("/login", passport.authenticate(
+    "local", {
+        successRedirect: '/profile',
+        failureRedirect: '/login',
+    }
+    
+));
+
+router.get("/logout", function(req, res) {
+    req.logout();
+    req.session.destroy();
+    res.redirect("/login");
+});
+
+
 
 router.get("/register", function(req, res) {
   res.render("register", { title: "Registration" });

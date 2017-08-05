@@ -1,37 +1,164 @@
-<div class="jumbotron">
-    <h1 class="display-3">Jumbotron heading</h1>
-    <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
-        nibh, ut fermentum massa justo sit amet risus.</p>
-    <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+
+ <head>
+<link rel="stylesheet" type="text/css" href="assets/css/morgan.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+
+</head> 
+{{> navbar}}
+
+<div class="container">
+	<div class="jumbotron">
+		<h1 id="username"></h1>
+		<div class="container">
+			<p>Thanks for joining the All Y'all community! We're here to provide you suggestions to top eats, drinks and events in Austin. Tell us what you're feeling below, and start experiencing new Austin attractions!</p> 
+		</div>
+	</div>
 </div>
 
-<div class="row marketing">
-    <div class="col-lg-6">
-        <h4>Subheading</h4>
-        <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+<div class="container">
+	<div class="questions">
+		<div class="row">
+			<p class="preference-btns">
+            <a class="btn btn-site-pref btn-lg pref-btn" data-name="restaurants" id="food-question" role="button">Question #1: Restaurants</a>
+			<a class="btn btn-site-pref btn-lg pref-btn" data-name="drinks" id="drinks-question" role="button">Question #2: Drinks</a>
+			<a class="btn btn-site-pref btn-lg pref-btn" data-name="events" id="events-question" role="button">Question #3: Events</a>
+            </p>
+		</div>
+		
+		<div class="row">
+			<h2 class="section-title text-center">Select the type of food(s) you are craving:</h2> 
+		</div> 
+	</div>
 
-        <h4>Subheading</h4>
-        <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+<!-- Food Section -->
+	<div class="food-section">
+		<div class="row">
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" data-name="Indian" id="Indian" data-state="unclicked" src="assets/img/indian.jpeg">
+				<h3 class="food caption" data-name="Indian" data-state="unclicked" data-type="caption" id="captionIndian">Indian</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" data-name="Thai" id="Thai" data-state="unclicked" src="assets/img/thai.jpeg">
+				<h3 class="food caption" data-name="Thai" data-state="unclicked" data-type="caption" id="captionThai">Thai</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" data-name="Mexican" id="Mexican" data-state="unclicked" src="assets/img/mexican.jpeg">
+				<h3 class="food caption" data-name="Mexican" data-state="unclicked" data-type="caption" id="captionMexican">Mexican</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" id="American" data-name="American" data-state="unclicked" src="assets/img/american.jpeg">
+				<h3 class="food caption" data-name="American" data-state="unclicked" data-type="caption" id="captionAmerican">American</h3>
+			</div>
+		</div>
 
-        <h4>Subheading</h4>
-        <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-    </div>
+		<div class="row">
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" data-name="Japanese" id="Japanese" data-state="unclicked" src="assets/img/japanese.jpeg">
+				<h3 class="food caption" data-name="Japanese" data-state="unclicked" data-type="caption" id="Japanese">Japanese</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" data-name="BBQ" id="BBQ" data-state="unclicked" src="assets/img/bbq.jpg">
+				<h3 class="food caption" data-name="BBQ" data-state="unclicked" data-type="caption" id="captionBBQ">BBQ</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" data-name="Italian" id="Italian" data-state="unclicked" src="assets/img/italian.jpeg">
+				<h3 class="food caption" data-name="Italian" data-state="unclicked" data-type="caption" id="captionItalian">Italian</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="food preference-images img-responsive" data-name="Chinese" id="Chinese" data-state="unclicked" src="assets/img/chinese.jpeg">
+				<h3 class="food caption" data-name="Chinese" data-state="unclicked" data-type="caption" id="captionChinese">Chinese</h3>
+			</div>
+		</div>
+	</div>	
 
-    <div class="col-lg-6">
-        <h4>Subheading</h4>
-        <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+<!-- Drinks Section -->
+	<div class="drinks-section">
+		<div class="row">
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" id="CoffeeShop" data-name="Coffee Shop" data-state="unclicked" src="assets/img/coffee.jpg">
+				<h3 class="drinks caption" data-name="Coffee Shop" data-state="unclicked" data-type="caption" id="captionCoffeeShop" data-id="CoffeeShop">Coffee Bar</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" id="JuiceBar" data-name="Juice Bar" data-state="unclicked" src="assets/img/juice.jpeg">
+				<h3 class="drinks caption" data-name="Juice Bar" data-state="unclicked" data-type="caption" id="captionJuiceBar" data-id="JuiceBar">Juice Bar</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" id="Brewery" data-name="Brewery" data-state="unclicked" src="assets/img/brewery.jpg">
+				<h3 class="drinks caption" data-name="Brewery" data-state="unclicked" data-type="caption" id="captionBrewery" data-id="Brewery">Brewery</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" id="WineBar" data-name="Wine Bar" data-state="unclicked" src="assets/img/wine_bar.jpeg">
+				<h3 class="drinks caption" data-name="Wine Bar" data-state="unclicked" data-type="caption" id="captionWineBar" data-id="WineBar">Wine Bar</h3>
+			</div>
+		</div>
 
-        <h4>Subheading</h4>
-        <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+		<div class="row">
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" data-name="Beer Garden" id="BeerGarden" data-state="unclicked" src="assets/img/beer_garden.jpg">
+				<h3 class="drinks caption" data-name="Beer Garden" data-state="unclicked" data-type="caption" id="captionBeerGarden" data-id="BeerGarden">Beer Garden</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" data-name="Bar" id="Bar" data-state="unclicked" src="assets/img/bar_preferences.jpeg">
+				<h3 class="drinks caption" data-name="Bar" data-state="unclicked" data-type="caption" id="captionBar" data-id="Bar">Bar</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" id="Lounge" data-name="Lounge" data-state="unclicked" src="assets/img/speakeasy.jpeg">
+				<h3 class="drinks caption" data-name="Lounge" data-state="unclicked" data-type="caption" id="captionLounge" data-id="Lounge">Speakeasy</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="drinks preference-images img-responsive" data-name="Pub" id="Pub" data-state="unclicked" src="assets/img/pub.jpeg">
+				<h3 class="drinks caption" data-name="Pub" data-state="unclicked" data-type="caption" id="captionPub" data-id="Pub">Pub</h3>
+			</div>
+		</div>
+	</div>
 
-        <h4>Subheading</h4>
-        <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-    </div>
+<!-- Events section -->
+	<div class="events-section">
+		<div class="row">
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="Sports" data-name="Sports" data-state="unclicked" src="assets/img/sports.jpeg">
+				<h3 class="events caption" data-name="Sports" data-state="unclicked" data-type="caption" id="captionSports">Sports</h3>	
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="Theater" data-name="Theater" data-state="unclicked" src="assets/img/theater.jpeg">
+				<h3 class="events caption" data-name="Theater" data-state="unclicked" data-type="caption" id="captionTheater">Theater</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="Comedy" data-name="Comedy" data-state="unclicked" src="assets/img/comedy.jpeg">
+				<h3 class="events caption" data-name="Comedy" data-state="unclicked" data-type="caption" id="captionComedy">Comedy</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="Country" data-name="Country" data-state="unclicked" src="assets/img/country.jpg">
+				<h3 class="events caption" data-name="Country" data-state="unclicked" data-type="caption" id="captionCountry">Country</h3>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="Rock" data-name="Rock" data-state="unclicked" src="assets/img/rock.jpeg">
+				<h3 class="events caption" data-name="Rock" data-state="unclicked" data-type="caption" id="captionRock">Rock</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="Rap" data-name="Rap" data-state="unclicked" src="assets/img/rap.jpeg">
+				<h3 class="events caption" data-name="Rap" data-state="unclicked" data-type="caption" id="captionRap">Rap</h3>
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="Pop" data-name="Pop" data-state="unclicked" src="assets/img/pop.jpeg">
+				<h3 class="events caption" data-name="Pop" data-state="unclicked" data-type="caption" id="captionPop">Pop</h3>	
+			</div>
+			<div class="col-md-3 thumbnail text-center">
+				<img class="events preference-images img-responsive" id="EDM" data-name="EDM" data-state="unclicked" src="assets/img/edm.jpeg">
+				<h3 class="events caption" data-name="EDM" data-state="unclicked" data-type="caption" id="captionEDM">EDM</h3>	
+			</div>
+		</div>
+
+	</div>	
+
+	<form class="text-right">
+		<button type="submit" id="submitBtn" class="btn btn-site btn-lg pref-btn">Submit</button>
+	</form>	
 </div>
 
-<footer class="footer">
-    <p>&copy; Company 2017</p>
-</footer>
 
-</div>
 <!-- /container -->

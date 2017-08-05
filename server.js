@@ -4,18 +4,25 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var expressValidator = require('express-validator');
-var config = require("./db.js");
+
+
+//database
 var mysql = require("mysql");
+var config = require("./db.js");
+
 var connection = mysql.createConnection(config.mySQLKeys);
 
 
 //Authentication packages
 var session = require("express-session");
 var passport = require("passport");
+
+//using local database
 var LocalStrategy = require('passport-local').Strategy;
 
-
 var MySQLStore = require('express-mysql-session')(session);
+
+var bcrypt = require("bcrypt");
 
 
 
@@ -23,6 +30,8 @@ var MySQLStore = require('express-mysql-session')(session);
 var app = express();
 
 var db = require("./models")
+
+
 
 //Serve static content for the app from the "public" directory in the application directory.
 
@@ -54,6 +63,10 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 
+app.use(function(req, res, next) {
+    res.locals.isAuthenticated = req.isAuthenticated();
+    next();
+})
 var routes = require('./controllers/user.js');
 app.use('/', routes);
 
@@ -62,18 +75,34 @@ app.use('/', routes);
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    console.log(username, password)
+    console.log(username, password);
 
+    connection.query("SELECT id, password FROM User WHERE username = ?", [username], function(err, results, fields){
+            if (err) done(err)
+                // console.log(results)
 
-    connection.query('SELECT Something sweet', function(err, results, fields){
-        if (err) {done(err)}
-        console.log(results)
-        // if (results.length === 0) {
-        //     done(null, false)
-        // }
+            if (results.length === 0) {
+                done(null, false)
+            }
+            else {
+                  var hash = results[0].password.toString();
+           
+            bcrypt.compare(password, hash, function(err, response) {
+                if (response === true) {
+                    return done(null, username);
+                } else {
+                    done(null, false)
+                }
+            })
+
+            }
+          
+
     })
 
-    //   return done(null, "hdhdh");
+
+
+      
 
   }
 ));

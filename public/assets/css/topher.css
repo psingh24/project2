@@ -1,0 +1,145 @@
+/*Login Page*/
+
+/*video*/
+.video-container {
+    position: relative;
+    bottom: 0%;
+    left: 0%;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background: #000;
+}
+.video-container video {
+    position: absolute;
+    width:calc(2000px - 37vw);
+    z-index: 0;
+    bottom: 0;
+
+}
+
+/*separate 'log in' button*/
+#login-button {
+	float: right;
+	position: relative;
+	z-index: 101;
+	margin-top: 20px;
+	padding: 0px 9px 0px 9px;
+}
+
+/*continue 'log in' button*/
+#loginin {
+	background-color: #e56746;
+	color: white;
+	margin-left: 25px;
+	margin-right: 25px;
+	border: none;
+}
+
+/*modal*/
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Oswald', sans-serif;
+}
+
+button, input, a, p, span {
+	font-family: 'Open Sans', sans-serif;
+}
+
+/*Facebook and Google Buttons*/
+.signin {
+	margin-left: 9px;
+	margin-right: 9px;
+}
+
+#facebook-btn {
+	padding-left: 9px;
+	padding-right: 9px;
+}
+
+.form-group {
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+#newUser {
+	background-color: #e56746;
+	color: white;
+	margin-left: 25px;
+	margin-right: 25px;
+	border: none;
+}
+
+#modal-login {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 30%;
+	transform: translate(-50%, -50%);
+}
+
+#login-logo {
+	display: block;
+    margin: auto;
+    width: 35%;
+    height: 35%;
+}
+
+#modal-login-label {
+	font-weight: bold;
+}
+
+/*responsive*/
+@media only screen and (max-width: 1428px) {
+	.signin {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+}
+
+@media only screen and (max-width: 1308px) {
+	#facebook-btn {
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+	#google-btn {
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+}
+
+@media only screen and (max-width: 883px) {
+	#modal-login {
+		min-width: 265px;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	#login-button {
+		position: fixed;
+		bottom:-12px;
+		margin-bottom: 0;
+		left: 50%;
+		width: 30vw;
+		transform: translate(-50%, -50%);
+	}	
+	#modal-login {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		width: 30%;
+		height:70vh;
+		transform: translate(-50%, -50%);
+		overflow:scroll;
+	/*	test css issues with
+		border:2px solid red;*/
+	}
+	.video-container {
+	    position: fixed;
+	    bottom: 0%;
+	    left: 0%;
+	    height: 100vh;
+	    width: 100vw;
+	    overflow: hidden;
+	    background: #000;
+	}
+}
