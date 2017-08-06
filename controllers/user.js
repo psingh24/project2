@@ -86,19 +86,19 @@ router.get("/login", function(req, res) {
   res.render("login", { title: "Login" });
 });
 
-// router.post("/login", passport.authenticate(
-//     "local", {
-//         successRedirect: '/profile',
-//         failureRedirect: '/login',
-//     }
+router.post("/login", passport.authenticate(
+    "local", {
+        successRedirect: '/profile',
+        failureRedirect: '/register',
+    }
 
-// ));
+));
 
-router.post("/login", passport.authenticate("local"), function(req, res) {
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
-  res.redirect("/profile");
-});
+// router.post("/login", passport.authenticate("local"), function(req, res) {
+//   // If this function gets called, authentication was successful.
+//   // `req.user` contains the authenticated user.
+//   res.redirect("/profile");
+// });
 
 router.get("/logout", function(req, res) {
   req.logout();
