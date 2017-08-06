@@ -4,6 +4,6 @@ module.exports = {
     port: 8889,
     user: "root",
     password: "root",
-    database: "project2_db"
+    database: "allYall"
   }
 };

@@ -8,53 +8,103 @@ var connection = mysql.createConnection(config.mySQLKeys);
 //validation for form errors
 var expressValidator = require("express-validator");
 
-var passport = require("passport")
+var passport = require("passport");
 //hash password
 var bcrypt = require("bcrypt");
 var saltRounds = 10;
 
-
-
 // Create routes
 // ----------------------------------------------------
-router.get("/", function(req, res){
-    // console.log(req.user);
-    // console.log(req.isAuthenticated())
-    res.render("register", { title: "Register"});
+router.get("/", function(req, res) {
+  // console.log(req.user);
+  // console.log(req.isAuthenticated())
+  res.render("register", { title: "Register" });
 });
 
-router.get("/main", function(req, res){
-    // console.log(req.user);
-    // console.log(req.isAuthenticated())
-    res.render("main", { title: "Main"});
+router.get("/main", authenticationMiddleware(), function(req, res) {
+  console.log(req.user);
+  // console.log(req.isAuthenticated())
+  var username;
+  // connection.query("SELECT username From User Where id = ?", [req.user.user_id], function(err, results, fields) {
+  //     if (err) throw err;
+  //     console.log(results[0].username)
+
+  //     });
+
+  var user = req.user;
+  if (typeof user === "string") {
+    res.render("main", { username: req.user });
+  } else {
+    res.render("main", { username: req.user[1] });
+  }
+  // res.render("main", { username: req.user[1]});
 });
 
 router.get("/profile", authenticationMiddleware(), function(req, res) {
+    console.log(req.user);
+    var arrayofMembers = [];
+    var user = req.user;
+    var index;
+  connection.query("SELECT id, username FROM User", function(
+    err,
+    results,
+    fields
+  ) {
+    if (err) throw err;
+    // console.log(results)
+    for (var i = 0; i < results.length; i++) {
+      arrayofMembers.push(results[i].username);
+    }
+    if (typeof user === "string") {
+        index = arrayofMembers.indexOf(req.user);
+    }
+    else {
+        index = arrayofMembers.indexOf(req.user[1])
+    }
+
     
-    res.render("profile", { title: "Profile"});
+    if (index > -1) {
+      arrayofMembers.splice(index, 1);
+    }
+    // console.log(arrayofMembers)
+ 
+    if (typeof user === "string") {
+      res.render("profile", {
+        username: req.user,
+        members: arrayofMembers
+      });
+    } else {
+      res.render("profile", {
+        username: req.user[1],
+        members: arrayofMembers
+      });
+    }
+  });
 });
 
 router.get("/login", function(req, res) {
-    res.render("login", { title: "Login"});
+  res.render("login", { title: "Login" });
 });
 
+// router.post("/login", passport.authenticate(
+//     "local", {
+//         successRedirect: '/profile',
+//         failureRedirect: '/login',
+//     }
 
+// ));
 
-router.post("/login", passport.authenticate(
-    "local", {
-        successRedirect: '/profile',
-        failureRedirect: '/login',
-    }
-    
-));
+router.post("/login", passport.authenticate("local"), function(req, res) {
+  // If this function gets called, authentication was successful.
+  // `req.user` contains the authenticated user.
+  res.redirect("/profile");
+});
 
 router.get("/logout", function(req, res) {
-    req.logout();
-    req.session.destroy();
-    res.redirect("/login");
+  req.logout();
+  req.session.destroy();
+  res.redirect("/login");
 });
-
-
 
 router.get("/register", function(req, res) {
   res.render("register", { title: "Registration" });
@@ -129,20 +179,20 @@ router.post("/register", function(req, res) {
         function(err, results, fields) {
           if (err) throw err;
 
-        connection.query('Select LAST_INSERT_ID() as user_id', function(err, results, fields){
+          connection.query("Select LAST_INSERT_ID() as user_id", function(
+            err,
+            results,
+            fields
+          ) {
             if (err) throw err;
 
-            var user_id = results[0]
-            //creates sessions 
-            console.log(user_id)
-            req.logIn(user_id, function(err) {
-                res.redirect("main")
-            } );
-    
-        })
-
-
-          
+            var user_id = results[0];
+            //creates sessions
+            console.log(user_id);
+            req.logIn([user_id, username], function(err) {
+              res.redirect("main");
+            });
+          });
         }
       );
     });
@@ -166,17 +216,18 @@ passport.serializeUser(function(user_id, done) {
 
 passport.deserializeUser(function(user_id, done) {
   done(null, user_id);
- 
 });
 
 //Checks if user is logged in
-function authenticationMiddleware () {  
-	return (req, res, next) => {
-		console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
-        //if true it renders next page
-	    if (req.isAuthenticated()) return next();
-	    res.redirect('/login')
-	}
+function authenticationMiddleware() {
+  return (req, res, next) => {
+    console.log(
+      `req.session.passport.user: ${JSON.stringify(req.session.passport)}`
+    );
+    //if true it renders next page
+    if (req.isAuthenticated()) return next();
+    res.redirect("/login");
+  };
 }
 
 // ----------------------------------------------------
