@@ -111,7 +111,8 @@ router.post('/profile', authenticationMiddleware(), function (req, res, next) {
   // req.body will hold the text fields, if there were any
   
     // res.send(res.file)
-
+var user = req.user
+    //Image upload 
     if (!req.files) {
         res.send("No files")
     } else {
@@ -129,10 +130,24 @@ router.post('/profile', authenticationMiddleware(), function (req, res, next) {
                     console.log(results)
                 })
 
+                // connection.query("SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 0", [user[0], user[0], user[0] ], function(err, data) {
+                //     if (err) throw err;
+                //     console.log(data)
+
+                //     var 
+                // })
+
+                // connection.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_one_id = ? AND user_two_id = ?")
+
+
+
                 // var image =req.files.image.name
+
                 res.render("profile", { image: image} )
+                
             })
         }
+        
     }
 
 })
@@ -159,29 +174,34 @@ router.get("/profile", authenticationMiddleware(), function(req, res) {
        
     // })
 
-//   connection.query("SELECT user_one_id, status FROM relationship WHERE user_two_id = ?",[user[0]], function(err,results, fields) {
-//     if (err) throw err;
-    
-//     for (var i = 0; i < results.length; i++) {
-//         idArray.push(results[i].user_one_id)
-//     }
-//     console.log(idArray)
-//     for (var i = 0; i < idArray.length; i++) {
-//           connection.query("SELECT username FROM User WHERE id = ?", [idArray[i]], function(err, data, fields) {
-//         if (err) throw err;
-//         names.push(data[i].username)
-//     })
-//     }
-// console.log(names)
-//   });
 
-   // connection.query()
-    connection.query("SELECT image FROM User WHERE id = ?", [req.user[0]], function(err, results) {
+
+
+
+
+    connection.query("SELECT image FROM User WHERE id = ?", [user[0]], function(err, results) {
         if (err) throw err;
-        
-        var image = results[0].image
-        res.render("profile", {username: user[1], image: image})
-    })
+        var image = results[0].image;
+
+
+var friendRequestName = [];
+var friendRequestId = [];
+        connection.query("SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 0", [user[0], user[0], user[0] ], function(err, data) {
+            if (err) throw err;
+            // console.log(data)
+            // var friendRequest = []
+            for (var i = 0; i < data.length; i++) {
+                friendRequestName.push(data[i].userA_username)
+                friendRequestId.push(data[i].userA_id)
+            }
+            // console.log(friendRequest)
+            res.render("profile", {username: user[1], image: image, friendRequest: friendRequestName, friendRequestId: friendRequestId})
+        })
+       
+     
+    });
+
+
 
     
 });

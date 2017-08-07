@@ -24,11 +24,15 @@
 				
                     {{#each members }}
 					<form action="/main" method="POST">
-					
+
+
                         <li>{{this}}<input type="hidden" name="id" value="{{this}}">
+					
+					
+
 							<input type="submit" name="sendRequest{{this}}" value="Add Friend">
-							</li>
-							</form>
+						</li>
+					</form>
 						
                     {{/each}}
 					

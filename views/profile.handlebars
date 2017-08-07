@@ -14,11 +14,33 @@
                     </div>
                     <h2 id="userNameLoginName">{{ username }}</h2>
                     <h5>Austin, TX</h5>
+
+                    <ul>Friends
+
+                        <li></li>
+                    </ul>
                 
 
-                <ul class="people_list">
-                    {{#each members }}
-                        <li>{{this}} <button name="{{this}}">Add Friend</button></li>
+                <ul class="people_list"> Friend Requests
+                    {{#each friendRequest }}
+
+                    
+
+                    <form action="/profile" method="POST">
+
+                        <li>{{this}}<input type="hidden" name="{{this}}" value="{{this}}">
+
+                        {{#each friendRequestId}}
+                        <li>hello</li>
+                        <input type="hidden" name="{{this}}" value="{{this}}">
+                        {{/each }}
+                        
+                    
+					    <input type="submit" name="acceptRequest{{this}}" value="Accept">
+
+
+                    </form>
+                        
                     {{/each}}
                     </ul>
                 </div>
