@@ -6,14 +6,19 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div>
-                        <img class="text-center" src="http://s3.amazonaws.com/37assets/svn/765-default-avatar.png" width="200px" alt="">
+                        <img class="text-center" src="uploads/{{ image }}" width="200px" alt="">
+                        <form enctype="multipart/form-data" action="/profile" method="POST">
+                            <input type="file" name="image" >
+                            <input type="submit" value="submit">
+                            </form>
                     </div>
                     <h2 id="userNameLoginName">{{ username }}</h2>
                     <h5>Austin, TX</h5>
+                
 
                 <ul class="people_list">
                     {{#each members }}
-                        <li>{{this}} <button>Add Friend</button></li>
+                        <li>{{this}} <button name="{{this}}">Add Friend</button></li>
                     {{/each}}
                     </ul>
                 </div>

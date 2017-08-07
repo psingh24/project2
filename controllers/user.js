@@ -1,6 +1,14 @@
 // Node Dependencies
 var express = require("express");
 var router = express.Router();
+//image upload
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+
+var fileUpload = require("express-fileupload");
+var path = require("path")
+
+var bodyParser = require('body-parser');
 var models = require("../models");
 var config = require("../db.js");
 var mysql = require("mysql");
@@ -23,27 +31,10 @@ router.get("/", function(req, res) {
 
 router.get("/main", authenticationMiddleware(), function(req, res) {
   console.log(req.user);
-  // console.log(req.isAuthenticated())
-  var username;
-  // connection.query("SELECT username From User Where id = ?", [req.user.user_id], function(err, results, fields) {
-  //     if (err) throw err;
-  //     console.log(results[0].username)
-
-  //     });
-
-  var user = req.user;
-  if (typeof user === "string") {
-    res.render("main", { username: req.user });
-  } else {
-    res.render("main", { username: req.user[1] });
-  }
-  // res.render("main", { username: req.user[1]});
-});
-
-router.get("/profile", authenticationMiddleware(), function(req, res) {
-    console.log(req.user);
-    var arrayofMembers = [];
+ var arrayofMembers = [];
+ var arrayId = []
     var user = req.user;
+   
     var index;
   connection.query("SELECT id, username FROM User", function(
     err,
@@ -54,32 +45,145 @@ router.get("/profile", authenticationMiddleware(), function(req, res) {
     // console.log(results)
     for (var i = 0; i < results.length; i++) {
       arrayofMembers.push(results[i].username);
+      arrayId.push(results[i].id)
     }
-    if (typeof user === "string") {
-        index = arrayofMembers.indexOf(req.user);
-    }
-    else {
-        index = arrayofMembers.indexOf(req.user[1])
-    }
+  
+   
+    var index = arrayofMembers.indexOf(req.user[1]);
+   
+    var idIndex = arrayId.indexOf(req.user[0])
 
-    
+
     if (index > -1) {
       arrayofMembers.splice(index, 1);
     }
-    // console.log(arrayofMembers)
- 
-    if (typeof user === "string") {
-      res.render("profile", {
-        username: req.user,
-        members: arrayofMembers
-      });
-    } else {
-      res.render("profile", {
-        username: req.user[1],
-        members: arrayofMembers
-      });
+    if (idIndex > -1) {
+      arrayId.splice(idIndex, 1);
     }
+    
+    res.render("main", {
+        username: req.user[1],
+        members: arrayId
+      });
+ 
+ 
+    // if (typeof user === "string") {
+    //   res.render("main", {
+    //     username: req.user,
+    //     members: arrayId
+    //   });
+    // } else {
+    //   res.render("main", {
+    //     username: req.user[1],
+    //     members: arrayId
+    //   });
+    // }
   });
+ 
+
+//   var user = req.user;
+//   if (typeof user === "string") {
+//     res.render("main", { username: req.user });
+//   } else {
+//     res.render("main", { username: req.user[1] });
+//   }
+  // res.render("main", { username: req.user[1]});
+});
+
+router.post("/main", authenticationMiddleware(), function(req, res) {
+  
+    var userOne = req.user[0];
+    var userTwo = req.body.id
+
+    console.log(userOne, userTwo)
+    console.log("test")
+
+    connection.query("INSERT INTO relationship (user_one_id, user_two_id, status, action_user_id) VALUES (?, ?, ?, ?)", [userOne, userTwo, 1, userOne], function(err, results, fields) {
+        if (err) throw err;
+        console.log(results)
+    })
+
+    res.redirect("main")
+})
+
+router.post('/profile', authenticationMiddleware(), function (req, res, next) {
+  // req.file is the `avatar` file
+  // req.body will hold the text fields, if there were any
+  
+    // res.send(res.file)
+
+    if (!req.files) {
+        res.send("No files")
+    } else {
+        var file = req.files.image
+        var extension = path.extname(file.name)
+
+        if (extension !== ".PNG" && extension !== ".GIF" && extension !== ".JPG") {
+            res.send("Only Images")
+        }else {
+            file.mv("./public/uploads/"+file.name, function(err) {
+                if (err) throw err;
+                var image = req.files.image.name
+                connection.query("UPDATE USER set image = ? WHERE id= ?", [image, req.user[0]], function(err, results) {
+                    if (err) throw err;
+                    console.log(results)
+                })
+
+                // var image =req.files.image.name
+                res.render("profile", { image: image} )
+            })
+        }
+    }
+
+})
+
+
+router.get("/profile", authenticationMiddleware(), function(req, res) {
+    console.log(req.user);
+    
+    var user = req.user;
+    // var idArray = [];
+    // var names = [];
+    // connection.query("SELECT user_one_id, status FROM relationship WHERE user_two_id = ?", [user[0]],function(err, results, fields) {
+    //     if (err) throw err;
+    //     console.log(results)
+    //     var names = []
+    //     for (var i= 0; i < results.length; i++) {
+    //          connection.query("SELECT username FROM User WHERE id = ?", [results[i].user_one_id], function(err, data) {
+    //              if (err) throw err;
+    //              names.push(data)
+    //          })
+    //     }
+    //         console.log(names)
+        
+       
+    // })
+
+//   connection.query("SELECT user_one_id, status FROM relationship WHERE user_two_id = ?",[user[0]], function(err,results, fields) {
+//     if (err) throw err;
+    
+//     for (var i = 0; i < results.length; i++) {
+//         idArray.push(results[i].user_one_id)
+//     }
+//     console.log(idArray)
+//     for (var i = 0; i < idArray.length; i++) {
+//           connection.query("SELECT username FROM User WHERE id = ?", [idArray[i]], function(err, data, fields) {
+//         if (err) throw err;
+//         names.push(data[i].username)
+//     })
+//     }
+// console.log(names)
+//   });
+
+   // connection.query()
+    connection.query("SELECT image FROM User WHERE id = ?", [req.user[0]], function(err, results) {
+        if (err) throw err;
+        
+        var image = results[0].image
+        res.render("profile", {username: user[1], image: image})
+    })
+
+    
 });
 
 router.get("/login", function(req, res) {
@@ -186,7 +290,7 @@ router.post("/register", function(req, res) {
           ) {
             if (err) throw err;
 
-            var user_id = results[0];
+            var user_id = results[0].user_id;
             //creates sessions
             console.log(user_id);
             req.logIn([user_id, username], function(err) {

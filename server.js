@@ -23,6 +23,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var MySQLStore = require('express-mysql-session')(session);
 
 var bcrypt = require("bcrypt");
+var fileUpload = require("express-fileupload");
 
 
 
@@ -36,6 +37,7 @@ var db = require("./models")
 //Serve static content for the app from the "public" directory in the application directory.
 
 app.use(express.static('public'));
+app.use(fileUpload());
 
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
