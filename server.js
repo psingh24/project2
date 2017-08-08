@@ -119,26 +119,4 @@ app.listen(port, function(){
 // })
 
 
-// Hey I had two questions about passport. First I intend to deploy my app on heroku and the name of local Strategy is causing some confusion. You mentioned in the tutorial that we use a local Strategy because we have a local db. Once it is deployed to heroku, the db can no longer be local. I'll be using their jawsDb mysql add on, will the local strategy still work with that? 
 
-// Second question, and this might be a stupid one. So i can get a User to sign in and redirect to the profile page. From there how would I pull info from the Database about the user and display it on the screen. 
-
-// router.post("/login", passport.authenticate(
-//     "local", {
-//         successRedirect: '/profile',
-//         failureRedirect: '/login',
-//     }
-    
-// ));
-
-// I tried do this:
-
-// router.post('/login',
-//   passport.authenticate('local'),
-//   function(req, res) {
-//     // If this function gets called, authentication was successful.
-//     // `req.user` contains the authenticated user.
-//     res.redirect('/login', {username: req.user});
-//   });
-
-//   but you cant seem to pass any info the redirect method. I always get an Error.

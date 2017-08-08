@@ -1,3 +1,5 @@
+
+
 {{> navbar}}
 
 <div class="container">
@@ -12,59 +14,24 @@
                              <img class="text-center" src="uploads/{{ data.image }}" width="200px" alt="">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="six columns">
-                            <div>
-                                <form enctype="multipart/form-data" action="/profile" method="POST">
-                                    <input type="file" name="image">
-                                    <input type="submit" value="Change Profile Picture">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="row">
                         <div class="six columns">
                              <h2 id="userNameLoginName">{{ data.name }}</h2>
                                 <p>Austin, TX</p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="12 columns">
+                    {{!-- <div class="row">
+                        <div class="ten columns">
                             <h5>Friends</h5>
                                 <ul>
                                     {{#each data.friends}}
-                                    <li>
-                                        <img src="uploads/{{this.image}}" width="50px" height="50px" alt="">{{this.username}}
-                                    <form action="/{{this.username}}" method="POST">
-                                        <input type="hidden" name="{{this.username}}">
-                                        <input type="submit" value="Visit Profile">
-                                        
-                                    
-                                    </form>
-                                    </li>
-                                        
-                                            {{!-- <img src="uploads/{{this.image}}" width="50px" height="50px" alt="">  {{this.username}}</li></a> --}}
+                                        <li>
+                                            <img src="uploads/{{this.image}}" width="50px" height="50px" alt="">  {{this.username}}</li>
                                     {{/each}}
                                 </ul>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="ten columns">
-                            <h5>Friend Request</h5>
-                                <ul class="people_list">
-                                    {{#each data.profile }}
-                                        <li>{{this.userA_username}}
-                                            <div class="accept">
-                                                <form action="/update/{{this.userA_id}}" method="POST">
-                                                <input type="hidden" name="{{this.userA_id}}" value="true">
-                                                <button type="submit">Accept</button>
-                                                </form> 
-                                            </div>
-                                        </li>
-                                    {{/each}}
-                                </ul>
-                        </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -121,36 +88,7 @@
                         <br>
                         <br>
                         <br>
-                        <div class="twelve columns">
-                            <h4>Feedback</h4>
-                            <hr>
-
-
-                            <form>
-                                <div class="row">
-                                    <div class="six columns">
-                                        <label for="exampleEmailInput">Your email</label>
-                                        <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
-                                    </div>
-                                    <div class="six columns">
-                                        <label for="exampleRecipientInput">Reason for contacting</label>
-                                        <select class="u-full-width" id="exampleRecipientInput">
-                                            <option value="Option 1">Questions</option>
-                                            <option value="Option 2">Admiration</option>
-                                            <option value="Option 3">Can I get your number?</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <label for="exampleMessage">Message</label>
-                                <textarea class="u-full-width" placeholder="Hi Dave …" id="exampleMessage"></textarea>
-                                    <label class="example-send-yourself-copy">
-                                    <input type="checkbox">
-                                    <span class="label-body">Send a copy to yourself</span>
-                                </label>
-                                <input class="button-primary" type="submit" value="Submit">
-                            </form>
-
-                        </div>
+                    
                     </div>
 
                 </div>
@@ -158,5 +96,3 @@
         </div>
     </div>
 </div>
-
-

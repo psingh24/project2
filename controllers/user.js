@@ -29,6 +29,7 @@ router.get("/", function(req, res) {
   res.render("register", { title: "Register" });
 });
 
+
 router.get("/main", authenticationMiddleware(), function(req, res) {
   console.log(req.user);
   var arrayofMembers = [];
@@ -93,7 +94,7 @@ router.post("/main", authenticationMiddleware(), function(req, res) {
   console.log(userOne, userTwo);
   console.log("test");
 
-  
+
 
   connection.query(
     "INSERT INTO relationship (user_one_id, user_two_id, status, action_user_id) VALUES (?, ?, ?, ?)",
@@ -146,7 +147,7 @@ router.post("/profile", authenticationMiddleware(), function(req, res, next) {
               [user[0]],
               function(err, data2) {
                 if (err) throw err;
-                console.log(data2);
+                console.log(data);
 
                 if (data.length === 0) {
                   res.render("profile", {
@@ -360,6 +361,37 @@ router.post("/register", function(req, res) {
   //       res.render("index", { title: "Registration Complete" });
   //     });
 });
+
+
+router.post("/:username", authenticationMiddleware(), function(req, res){
+    // console.log(req.params.username)
+
+    var username = req.params.username
+
+    connection.query("SELECT User.username, User.id, User.image From USER WHERE User.username = ?", [username], function(err, results, fields) {
+        if (err) throw err;
+
+        res.render("userprofile", {data: { name: username, image: results[0].image }})
+
+    })
+// res.render("userprofile")
+    
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 passport.serializeUser(function(user_id, done) {
   done(null, user_id);
