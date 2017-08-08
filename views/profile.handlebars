@@ -6,13 +6,13 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div>
-                        <img class="text-center" src="uploads/{{ image }}" width="200px" alt="">
+                        <img class="text-center" src="uploads/{{ data.image }}" width="200px" alt="">
                         <form enctype="multipart/form-data" action="/profile" method="POST">
                             <input type="file" name="image" >
                             <input type="submit" value="submit">
                             </form>
                     </div>
-                    <h2 id="userNameLoginName">{{ username }}</h2>
+                    <h2 id="userNameLoginName">{{ data.name }}</h2>
                     <h5>Austin, TX</h5>
 
                     <ul>Friends
@@ -22,24 +22,25 @@
                 
 
                 <ul class="people_list"> Friend Requests
-                    {{#each friendRequest }}
+                    {{#each data.profile }}
 
                     
 
-                    <form action="/profile" method="POST">
+                   
 
-                        <li>{{this}}<input type="hidden" name="{{this}}" value="{{this}}">
-
-                        {{#each friendRequestId}}
-                        <li>hello</li>
-                        <input type="hidden" name="{{this}}" value="{{this}}">
-                        {{/each }}
+                        <li>{{this.userA_username}}
+                               <div class="devourBtn">
+                                 <form action="/update/{{this.id}}" method="POST">
+                                <input type="hidden" name="devoured" value="true">
+                                <button type="submit" >Accept</button>
+                                </form> 
+                            </div>
                         
                     
-					    <input type="submit" name="acceptRequest{{this}}" value="Accept">
+					    
+                        </li>
 
-
-                    </form>
+                   
                         
                     {{/each}}
                     </ul>

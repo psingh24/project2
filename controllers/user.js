@@ -186,16 +186,19 @@ router.get("/profile", authenticationMiddleware(), function(req, res) {
 
 var friendRequestName = [];
 var friendRequestId = [];
-        connection.query("SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 0", [user[0], user[0], user[0] ], function(err, data) {
+connection.query("SELECT * From User INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 0) as T2 ON User.ID = T2.userB_id;", [user[0], user[0], user[0]], function(err, data) {
             if (err) throw err;
             // console.log(data)
             // var friendRequest = []
-            for (var i = 0; i < data.length; i++) {
-                friendRequestName.push(data[i].userA_username)
-                friendRequestId.push(data[i].userA_id)
-            }
+            // for (var i = 0; i < data.length; i++) {
+            //     friendRequestName.push(data[i].userA_username)
+            //     friendRequestId.push(data[i].userA_id)
+            // }
             // console.log(friendRequest)
-            res.render("profile", {username: user[1], image: image, friendRequest: friendRequestName, friendRequestId: friendRequestId})
+                console.log(data)
+        
+            res.render("profile", {data: {profile: data, image: data[0].image, name: data[0].userB_username}})
+            
         })
        
      
