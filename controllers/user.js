@@ -2,13 +2,13 @@
 var express = require("express");
 var router = express.Router();
 //image upload
-var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
+var multer = require("multer");
+var upload = multer({ dest: "uploads/" });
 
 var fileUpload = require("express-fileupload");
-var path = require("path")
+var path = require("path");
 
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 var models = require("../models");
 var config = require("../db.js");
 var mysql = require("mysql");
@@ -31,11 +31,11 @@ router.get("/", function(req, res) {
 
 router.get("/main", authenticationMiddleware(), function(req, res) {
   console.log(req.user);
- var arrayofMembers = [];
- var arrayId = []
-    var user = req.user;
-   
-    var index;
+  var arrayofMembers = [];
+  var arrayId = [];
+  var user = req.user;
+
+  var index;
   connection.query("SELECT id, username FROM User", function(
     err,
     results,
@@ -45,14 +45,12 @@ router.get("/main", authenticationMiddleware(), function(req, res) {
     // console.log(results)
     for (var i = 0; i < results.length; i++) {
       arrayofMembers.push(results[i].username);
-      arrayId.push(results[i].id)
+      arrayId.push(results[i].id);
     }
-  
-   
-    var index = arrayofMembers.indexOf(req.user[1]);
-   
-    var idIndex = arrayId.indexOf(req.user[0])
 
+    var index = arrayofMembers.indexOf(req.user[1]);
+
+    var idIndex = arrayId.indexOf(req.user[0]);
 
     if (index > -1) {
       arrayofMembers.splice(index, 1);
@@ -60,13 +58,12 @@ router.get("/main", authenticationMiddleware(), function(req, res) {
     if (idIndex > -1) {
       arrayId.splice(idIndex, 1);
     }
-    
+
     res.render("main", {
-        username: req.user[1],
-        members: arrayId
-      });
- 
- 
+      username: req.user[1],
+      members: arrayId
+    });
+
     // if (typeof user === "string") {
     //   res.render("main", {
     //     username: req.user,
@@ -79,147 +76,174 @@ router.get("/main", authenticationMiddleware(), function(req, res) {
     //   });
     // }
   });
- 
 
-//   var user = req.user;
-//   if (typeof user === "string") {
-//     res.render("main", { username: req.user });
-//   } else {
-//     res.render("main", { username: req.user[1] });
-//   }
+  //   var user = req.user;
+  //   if (typeof user === "string") {
+  //     res.render("main", { username: req.user });
+  //   } else {
+  //     res.render("main", { username: req.user[1] });
+  //   }
   // res.render("main", { username: req.user[1]});
 });
 
 router.post("/main", authenticationMiddleware(), function(req, res) {
+  var userOne = req.user[0];
+  var userTwo = req.body.id;
+
+  console.log(userOne, userTwo);
+  console.log("test");
+
   
-    var userOne = req.user[0];
-    var userTwo = req.body.id
 
-    console.log(userOne, userTwo)
-    console.log("test")
+  connection.query(
+    "INSERT INTO relationship (user_one_id, user_two_id, status, action_user_id) VALUES (?, ?, ?, ?)",
+    [userOne, userTwo, "Pending", userOne],
+    function(err, results, fields) {
+      if (err) throw err;
+      console.log(results);
+    }
+  );
 
-    connection.query("INSERT INTO relationship (user_one_id, user_two_id, status, action_user_id) VALUES (?, ?, ?, ?)", [userOne, userTwo, 1, userOne], function(err, results, fields) {
-        if (err) throw err;
-        console.log(results)
-    })
+  res.redirect("main");
+});
 
-    res.redirect("main")
-})
-
-router.post('/profile', authenticationMiddleware(), function (req, res, next) {
+router.post("/profile", authenticationMiddleware(), function(req, res, next) {
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
-  
-    // res.send(res.file)
-var user = req.user
-    //Image upload 
-    if (!req.files) {
-        res.send("No files")
+
+  // res.send(res.file)
+  var user = req.user;
+  //Image upload
+  if (!req.files) {
+    res.send("No files");
+  } else {
+    var file = req.files.image;
+    var extension = path.extname(file.name);
+
+    if (extension !== ".PNG" && extension !== ".GIF" && extension !== ".JPG") {
+      res.send("Only Images");
     } else {
-        var file = req.files.image
-        var extension = path.extname(file.name)
+      file.mv("./public/uploads/" + file.name, function(err) {
+        if (err) throw err;
+        var image = req.files.image.name;
+        connection.query(
+          "UPDATE USER set image = ? WHERE id= ?",
+          [image, req.user[0]],
+          function(err, results) {
+            if (err) throw err;
+            console.log(results);
+          }
+        );
 
-        if (extension !== ".PNG" && extension !== ".GIF" && extension !== ".JPG") {
-            res.send("Only Images")
-        }else {
-            file.mv("./public/uploads/"+file.name, function(err) {
+        connection.query(
+          "SELECT * From User INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 'Pending') as T2 ON User.ID = T2.userB_id;",
+          [user[0], user[0], user[0]],
+          function(err, data) {
+            if (err) throw err;
+
+            connection.query(
+              "SELECT User.username, User.image FROM User INNER JOIN relationship ON User.id=relationship.user_one_id WHERE relationship.status = 'Accepted' AND relationship.user_two_id = ?",
+              [user[0]],
+              function(err, data2) {
                 if (err) throw err;
-                var image = req.files.image.name
-                connection.query("UPDATE USER set image = ? WHERE id= ?", [image, req.user[0]], function(err, results) {
-                    if (err) throw err;
-                    console.log(results)
-                })
+                console.log(data2);
 
-                // connection.query("SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 0", [user[0], user[0], user[0] ], function(err, data) {
-                //     if (err) throw err;
-                //     console.log(data)
-
-                //     var 
-                // })
-
-                // connection.query("UPDATE relationship SET status = 1, action_user_id = ? WHERE user_one_id = ? AND user_two_id = ?")
-
-
-
-                // var image =req.files.image.name
-
-                res.render("profile", { image: image} )
-                
-            })
-        }
-        
+                if (data.length === 0) {
+                  res.render("profile", {
+                    data: { name: user[1], image: image, friends: data2 }
+                  });
+                } else {
+                  res.render("profile", {
+                    data: {
+                      profile: data,
+                      image: data[0].image,
+                      name: data[0].userB_username,
+                      friends: data2
+                    }
+                  });
+                }
+              }
+            );
+          }
+        );
+      });
     }
-
-})
-
+  }
+});
 
 router.get("/profile", authenticationMiddleware(), function(req, res) {
-    console.log(req.user);
-    
-    var user = req.user;
-    // var idArray = [];
-    // var names = [];
-    // connection.query("SELECT user_one_id, status FROM relationship WHERE user_two_id = ?", [user[0]],function(err, results, fields) {
-    //     if (err) throw err;
-    //     console.log(results)
-    //     var names = []
-    //     for (var i= 0; i < results.length; i++) {
-    //          connection.query("SELECT username FROM User WHERE id = ?", [results[i].user_one_id], function(err, data) {
-    //              if (err) throw err;
-    //              names.push(data)
-    //          })
-    //     }
-    //         console.log(names)
-        
-       
-    // })
+  console.log(req.user);
 
+  var user = req.user;
+  connection.query("SELECT image FROM User WHERE id = ?", [user[0]], function(
+    err,
+    results
+  ) {
+    if (err) throw err;
+    var image = results[0].image;
 
-
-
-
-
-    connection.query("SELECT image FROM User WHERE id = ?", [user[0]], function(err, results) {
+    connection.query(
+      "SELECT * From User INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 'Pending') as T2 ON User.ID = T2.userB_id;",
+      [user[0], user[0], user[0]],
+      function(err, data) {
         if (err) throw err;
-        var image = results[0].image;
 
-
-var friendRequestName = [];
-var friendRequestId = [];
-connection.query("SELECT * From User INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 0) as T2 ON User.ID = T2.userB_id;", [user[0], user[0], user[0]], function(err, data) {
+        connection.query(
+          "SELECT User.username, User.image FROM User INNER JOIN relationship ON User.id=relationship.user_one_id WHERE relationship.status = 'Accepted' AND relationship.user_two_id = ?",
+          [user[0]],
+          function(err, data2) {
             if (err) throw err;
-            // console.log(data)
-            // var friendRequest = []
-            // for (var i = 0; i < data.length; i++) {
-            //     friendRequestName.push(data[i].userA_username)
-            //     friendRequestId.push(data[i].userA_id)
-            // }
-            // console.log(friendRequest)
-                console.log(data)
-        
-            res.render("profile", {data: {profile: data, image: data[0].image, name: data[0].userB_username}})
-            
-        })
-       
-     
-    });
+            console.log(data2);
 
+            if (data.length === 0) {
+              res.render("profile", {
+                data: { name: user[1], image: image, friends: data2 }
+              });
+            } else {
+              res.render("profile", {
+                data: {
+                  profile: data,
+                  image: data[0].image,
+                  name: data[0].userB_username,
+                  friends: data2
+                }
+              });
+            }
+          }
+        );
+        // console.log(data);
+      }
+    );
+  });
+});
 
+router.post("/update/:id", authenticationMiddleware(), function(req, res) {
+  console.log(req.params.id);
+  var sender = req.params.id;
+  var user = req.user[0];
 
-    
+  connection.query(
+    "UPDATE relationship SET status = ?, action_user_id = ? WHERE user_one_id = ? AND user_two_id = ?",
+    ["Accepted", user, sender, user],
+    function(err, results, fields) {
+      if (err) throw err;
+      console.log(results);
+      res.redirect("/profile");
+    }
+  );
 });
 
 router.get("/login", function(req, res) {
   res.render("login", { title: "Login" });
 });
 
-router.post("/login", passport.authenticate(
-    "local", {
-        successRedirect: '/profile',
-        failureRedirect: '/register',
-    }
-
-));
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/profile",
+    failureRedirect: "/register"
+  })
+);
 
 // router.post("/login", passport.authenticate("local"), function(req, res) {
 //   // If this function gets called, authentication was successful.
