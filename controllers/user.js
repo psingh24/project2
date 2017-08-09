@@ -32,6 +32,9 @@ router.get("/", function(req, res) {
   res.render("register", { title: "Register" });
 });
 
+router.get("/developers", function(req, res) {
+    res.render("developers", { title: "Developers" });
+});
 
 router.get("/main", authenticationMiddleware(), function(req, res) {
   console.log(req.user);
