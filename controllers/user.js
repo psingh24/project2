@@ -1,22 +1,25 @@
 // Node Dependencies
 var express = require("express");
 var router = express.Router();
+var bodyParser = require("body-parser");
 //image upload
-var multer = require("multer");
-var upload = multer({ dest: "uploads/" });
-
 var fileUpload = require("express-fileupload");
 var path = require("path");
 
-var bodyParser = require("body-parser");
+//models 
 var models = require("../models");
+
+//SQL tie-ins
 var config = require("../db.js");
 var mysql = require("mysql");
 var connection = mysql.createConnection(config.mySQLKeys);
+
 //validation for form errors
 var expressValidator = require("express-validator");
 
+//Secured routing
 var passport = require("passport");
+
 //hash password
 var bcrypt = require("bcrypt");
 var saltRounds = 10;
@@ -174,6 +177,8 @@ router.post("/profile", authenticationMiddleware(), function(req, res, next) {
 
 router.get("/profile", authenticationMiddleware(), function(req, res) {
   console.log(req.user);
+
+//   models.User.findAll({ where: {id: req.user[0]}}).then(function(data){console.log(data)})
 
   var user = req.user;
   connection.query("SELECT image FROM User WHERE id = ?", [user[0]], function(

@@ -1,3 +1,8 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="assets/css/skeleton.css">
+</head>
+
+
 {{> navbar}}
 
 <div class="container">
@@ -17,7 +22,7 @@
                             <div>
                                 <form enctype="multipart/form-data" action="/profile" method="POST">
                                     <input type="file" name="image">
-                                    <input type="submit" value="Change Profile Picture">
+                                    <input type="submit" value="Upload Picture">
                                 </form>
                             </div>
                         </div>
@@ -31,21 +36,15 @@
                     <div class="row">
                         <div class="12 columns">
                             <h5>Friends</h5>
-                                <ul>
-                                    {{#each data.friends}}
-                                    <li>
-                                        <img src="uploads/{{this.image}}" width="50px" height="50px" alt="">{{this.username}}
-                                    <form action="/{{this.username}}" method="POST">
-                                        <input type="hidden" name="{{this.username}}">
-                                        <input type="submit" value="Visit Profile">
-                                        
-                                    
-                                    </form>
-                                    </li>
-                                        
-                                            {{!-- <img src="uploads/{{this.image}}" width="50px" height="50px" alt="">  {{this.username}}</li></a> --}}
-                                    {{/each}}
-                                </ul>
+                                     <div class="row">
+                                        <div class="12 columns">
+                                            {{#each data.friends}}
+                                                <form style="float: left; margin-right: 10px;" action="/{{this.username}}" method="POST">
+                                                    <input alt="Submit" id="image" type="image" src="uploads/{{this.image}}" width="75px" height="75px">
+                                                </form>
+                                            {{/each}}
+                                        </div>
+                                    </div>
                         </div>
                     </div>
                     <div class="row">
@@ -158,5 +157,3 @@
         </div>
     </div>
 </div>
-
-

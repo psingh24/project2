@@ -1,6 +1,10 @@
 $(document).ready(function(){
 
 
+// $("#addFriend").on("click", function(){
+// 		alert("Friend Request Sent")
+// 	})
+// 	console.log("test")
 
 
 

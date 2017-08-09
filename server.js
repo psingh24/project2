@@ -112,11 +112,11 @@ passport.use(new LocalStrategy(
 
 var port = process.env.PORT || 3000;
 
-// db.sequelize.sync().then(function() {
+db.sequelize.sync({force: false}).then(function() {
 app.listen(port, function(){
   console.log('Listening on port ' + port);
 });
-// })
+})
 
 
 
