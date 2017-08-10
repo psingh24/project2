@@ -26,15 +26,15 @@ var saltRounds = 10;
 
 // Create routes
 // ----------------------------------------------------
-router.get("/", function(req, res) {
-  // console.log(req.user);
-  // console.log(req.isAuthenticated())
-  res.render("register", { title: "Register" });
-});
+// router.get("/", function(req, res) {
+//   // console.log(req.user);
+//   // console.log(req.isAuthenticated())
+//   res.render("register", { title: "Register" });
+// });
 
-router.get("/developers", function(req, res) {
-    res.render("developers", { title: "Developers" });
-});
+// router.get("/developers", function(req, res) {
+//     res.render("developers", { title: "Developers" });
+// });
 
 router.get("/main", authenticationMiddleware(), function(req, res) {
   console.log(req.user);
@@ -43,7 +43,7 @@ router.get("/main", authenticationMiddleware(), function(req, res) {
   var user = req.user;
 
   var index;
-  connection.query("SELECT id, username FROM User", function(
+  connection.query("SELECT id, userName FROM users", function(
     err,
     results,
     fields
@@ -71,26 +71,9 @@ router.get("/main", authenticationMiddleware(), function(req, res) {
       members: arrayId
     });
 
-    // if (typeof user === "string") {
-    //   res.render("main", {
-    //     username: req.user,
-    //     members: arrayId
-    //   });
-    // } else {
-    //   res.render("main", {
-    //     username: req.user[1],
-    //     members: arrayId
-    //   });
-    // }
   });
 
-  //   var user = req.user;
-  //   if (typeof user === "string") {
-  //     res.render("main", { username: req.user });
-  //   } else {
-  //     res.render("main", { username: req.user[1] });
-  //   }
-  // res.render("main", { username: req.user[1]});
+  
 });
 
 router.post("/main", authenticationMiddleware(), function(req, res) {
@@ -103,11 +86,21 @@ router.post("/main", authenticationMiddleware(), function(req, res) {
 
 
   connection.query(
-    "INSERT INTO relationship (user_one_id, user_two_id, status, action_user_id) VALUES (?, ?, ?, ?)",
-    [userOne, userTwo, "Pending", userOne],
+    "INSERT INTO relationships (friendId, status, userid) VALUES (?, ?, ?)",
+    [userTwo, "Pending", userOne],
     function(err, results, fields) {
-      if (err) throw err;
-      console.log(results);
+        if (err) throw err;
+
+    //     connection.query(
+    // "INSERT INTO relationships (friendId, status, userid) VALUES (?, ?, ?)",
+    // [userOne, "Pending", userTwo],
+    // function(err, data, fields) {
+    //     if (err) throw err;
+    
+    // })
+
+
+    //   console.log(results);
     }
   );
 
@@ -134,95 +127,131 @@ router.post("/profile", authenticationMiddleware(), function(req, res, next) {
         if (err) throw err;
         var image = req.files.image.name;
         connection.query(
-          "UPDATE USER set image = ? WHERE id= ?",
+          "UPDATE users set image = ? WHERE id= ?",
           [image, req.user[0]],
           function(err, results) {
             if (err) throw err;
             console.log(results);
           }
         );
+        res.render("profile")
 
-        connection.query(
-          "SELECT * From User INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 'Pending') as T2 ON User.ID = T2.userB_id;",
-          [user[0], user[0], user[0]],
-          function(err, data) {
-            if (err) throw err;
+        // connection.query(
+        //   "SELECT * From users INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 'Pending') as T2 ON User.ID = T2.userB_id;",
+        //   [user[0], user[0], user[0]],
+        //   function(err, data) {
+        //     if (err) throw err;
 
-            connection.query(
-              "SELECT User.username, User.image FROM User INNER JOIN relationship ON User.id=relationship.user_one_id WHERE relationship.status = 'Accepted' AND relationship.user_two_id = ?",
-              [user[0]],
-              function(err, data2) {
-                if (err) throw err;
-                console.log(data);
+        //     connection.query(
+        //       "SELECT User.username, User.image FROM User INNER JOIN relationship ON User.id=relationship.user_one_id WHERE relationship.status = 'Accepted' AND relationship.user_two_id = ?",
+        //       [user[0]],
+        //       function(err, data2) {
+        //         if (err) throw err;
+        //         console.log(data);
 
-                if (data.length === 0) {
-                  res.render("profile", {
-                    data: { name: user[1], image: image, friends: data2 }
-                  });
-                } else {
-                  res.render("profile", {
-                    data: {
-                      profile: data,
-                      image: data[0].image,
-                      name: data[0].userB_username,
-                      friends: data2
-                    }
-                  });
-                }
-              }
-            );
-          }
-        );
+        //         if (data.length === 0) {
+        //           res.render("profile", {
+        //             data: { name: user[1], image: image, friends: data2 }
+        //           });
+        //         } else {
+        //           res.render("profile", {
+        //             data: {
+        //               profile: data,
+        //               image: data[0].image,
+        //               name: data[0].userB_username,
+        //               friends: data2
+        //             }
+        //           });
+        //         }
+        //       }
+        //     );
+        //   }
+        // );
       });
     }
   }
 });
+
+router.get("/api/friend", function(req, res) {
+     models.relationships.findAll({
+         where: {friendID: 1},
+        include: [{ 
+
+            model: models.user,
+            // include: [
+            //     { model: models.user}
+            // ]
+      }],
+
+    }).then(function(dbEvent) {
+      res.json(dbEvent);
+    });
+    
+})
 
 router.get("/profile", authenticationMiddleware(), function(req, res) {
   console.log(req.user);
 
 //   models.User.findAll({ where: {id: req.user[0]}}).then(function(data){console.log(data)})
 
+
+     models.relationships.findAll({
+         where: {friendID: 1},
+        include: [{ 
+
+            model: models.user,
+            // include: [
+            //     { model: models.user}
+            // ]
+      }],
+
+    }).then(function(dbEvent) {
+      console.log(dbEvent);
+    });
+  
+
   var user = req.user;
-  connection.query("SELECT image FROM User WHERE id = ?", [user[0]], function(
+  connection.query("SELECT image FROM users WHERE id = ?", [user[0]], function(
     err,
     results
   ) {
     if (err) throw err;
     var image = results[0].image;
 
-    connection.query(
-      "SELECT * From User INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 'Pending') as T2 ON User.ID = T2.userB_id;",
-      [user[0], user[0], user[0]],
-      function(err, data) {
-        if (err) throw err;
+    res.render("profile")
 
-        connection.query(
-          "SELECT User.username, User.image FROM User INNER JOIN relationship ON User.id=relationship.user_one_id WHERE relationship.status = 'Accepted' AND relationship.user_two_id = ?",
-          [user[0]],
-          function(err, data2) {
-            if (err) throw err;
-            console.log(data2);
+    // connection.query(
+    //   "SELECT * From User INNER JOIN (SELECT userA.id AS userA_id, userA.username AS userA_username, userB.id AS userB_id, userB.username AS userB_username, status, action_user_id, userC.username AS action_user_username FROM relationship INNER JOIN User AS userA ON userA.id = relationship.user_one_id INNER JOIN User AS userB ON userB.id = relationship.user_two_id INNER JOIN User AS userC ON userC.id = relationship.action_user_id WHERE (userA.id = ? OR userB.id = ?) AND userC.id != ? AND status = 'Pending') as T2 ON User.ID = T2.userB_id;",
+    //   [user[0], user[0], user[0]],
+    //   function(err, data) {
+    //     if (err) throw err;
 
-            if (data.length === 0) {
-              res.render("profile", {
-                data: { name: user[1], image: image, friends: data2 }
-              });
-            } else {
-              res.render("profile", {
-                data: {
-                  profile: data,
-                  image: data[0].image,
-                  name: data[0].userB_username,
-                  friends: data2
-                }
-              });
-            }
-          }
-        );
-        // console.log(data);
-      }
-    );
+    //     connection.query(
+    //       "SELECT User.username, User.image FROM User INNER JOIN relationship ON User.id=relationship.user_one_id WHERE relationship.status = 'Accepted' AND relationship.user_two_id = ?",
+    //       [user[0]],
+    //       function(err, data2) {
+    //         if (err) throw err;
+    //         // console.log(data2);
+
+    //         if (data.length === 0) {
+    //           res.render("profile", {
+    //             data: { name: user[1], image: image, friends: data2 }
+    //           });
+    //         } else {
+    //           res.render("profile", {
+    //             data: {
+    //               profile: data,
+    //               image: data[0].image,
+    //               name: data[0].userB_username,
+    //               friends: data2
+    //             }
+    //           });
+    //         }
+    //       }
+    //     );
+    //     // console.log(data);
+    //   }
+    // );
   });
 });
 
@@ -232,8 +261,8 @@ router.post("/update/:id", authenticationMiddleware(), function(req, res) {
   var user = req.user[0];
 
   connection.query(
-    "UPDATE relationship SET status = ?, action_user_id = ? WHERE user_one_id = ? AND user_two_id = ?",
-    ["Accepted", user, sender, user],
+    "UPDATE relationships SET status = ?, friendID = ? WHERE userId = ?",
+    ["Accepted", sender, user],
     function(err, results, fields) {
       if (err) throw err;
       console.log(results);
@@ -334,7 +363,7 @@ router.post("/register", function(req, res) {
     bcrypt.hash(password, saltRounds, function(err, hash) {
       // Store hash in your password DB.
       connection.query(
-        "INSERT INTO User (username, email, password) VALUES (?, ?, ?)",
+        "INSERT INTO users (userName, email, password) VALUES (?, ?, ?)",
         [username, email, hash],
         function(err, results, fields) {
           if (err) throw err;
@@ -357,17 +386,7 @@ router.post("/register", function(req, res) {
       );
     });
   }
-  // ----------------------------------------------------
-
-  //   models.User
-  //     .create({
-  //       username: username,
-  //       email: email,
-  //       password: password
-  //     })
-  //     .then(function() {
-  //       res.render("index", { title: "Registration Complete" });
-  //     });
+  
 });
 
 

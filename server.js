@@ -6,7 +6,7 @@ var methodOverride = require('method-override');
 var expressValidator = require('express-validator');
 
 
-//database
+// database
 var mysql = require("mysql");
 var config = require("./db.js");
 
@@ -17,7 +17,7 @@ var connection = mysql.createConnection(config.mySQLKeys);
 var session = require("express-session");
 var passport = require("passport");
 
-//using local database
+// using local database
 var LocalStrategy = require('passport-local').Strategy;
 
 var MySQLStore = require('express-mysql-session')(session);
@@ -34,12 +34,12 @@ var db = require("./models")
 
 
 
-//Serve static content for the app from the "public" directory in the application directory.
+// Serve static content for the app from the "public" directory in the application directory.
 
 app.use(express.static('public'));
 app.use(fileUpload());
 
-// Parse application/x-www-form-urlencoded
+Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares!
@@ -69,8 +69,15 @@ app.use(function(req, res, next) {
     res.locals.isAuthenticated = req.isAuthenticated();
     next();
 })
+
+
 var routes = require('./controllers/user.js');
 app.use('/', routes);
+
+
+var apiRoutes = require('./controllers/api-routes.js');
+app.use('/', apiRoutes);
+
 
 // require('./controllers/burgers_controllers.js')(app);
 
@@ -79,7 +86,9 @@ passport.use(new LocalStrategy(
   function(username, password, done) {
     console.log(username, password);
 
-    connection.query("SELECT id, password FROM User WHERE username = ?", [username], function(err, results, fields){
+
+
+    connection.query("SELECT id, password FROM users WHERE userName = ?", [username], function(err, results, fields){
             if (err) done(err)
                 // console.log(results)
 
@@ -112,7 +121,7 @@ passport.use(new LocalStrategy(
 
 var port = process.env.PORT || 3000;
 
-db.sequelize.sync({force: false}).then(function() {
+db.sequelize.sync({}).then(function() {
 app.listen(port, function(){
   console.log('Listening on port ' + port);
 });

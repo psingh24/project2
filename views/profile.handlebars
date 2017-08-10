@@ -40,7 +40,7 @@
                                         <div class="12 columns">
                                             {{#each data.friends}}
                                                 <form style="float: left; margin-right: 10px;" action="/{{this.username}}" method="POST">
-                                                    <input alt="Submit" id="image" type="image" src="uploads/{{this.image}}" width="75px" height="75px">
+                                                    <input title="{{this.username}}" alt="Submit" id="image" type="image" src="uploads/{{this.image}}" width="75px" height="75px">
                                                 </form>
                                             {{/each}}
                                         </div>
@@ -71,15 +71,12 @@
         <div class="eight columns">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="row" id="userNameLogin">
-                        <hr>
-                    </div>
                     <div class="row">
                         <div class="twelve columns text-">
-                            <h4>Last Search</h4>
+                            <h4>Your Meet Ups</h4>
                             <hr>
-                            <div class="twelve columns text-">
-                                <h5>Food</h5>
+                              <div class="text-center twelve columns text-">
+                                <h5>Tin's Special Meeting</h5>
                                     <div class="five columns thumbnail text-center">
                                         <img class="food preference-images img-responsive" data-name="Indian" id="Indian" data-state="unclicked" src="assets/img/indian.jpeg">
                                         <h3 class="food caption" data-name="Indian" data-state="unclicked" data-type="caption" id="captionIndian">Indian</h3>
@@ -88,39 +85,37 @@
                                         <img class="food preference-images img-responsive" id="American" data-name="American" data-state="unclicked" src="assets/img/american.jpeg">
                                         <h3 class="food caption" data-name="American" data-state="unclicked" data-type="caption" id="captionAmerican">American</h3>
                                     </div>
-                            </div>
-                            <div class="twelve columns text-">
-                                <h5>Drinks</h5>
-                                    <div class="five columns thumbnail text-center">
-                                        <img class="drinks preference-images img-responsive" id="Coffee" data-name="Coffee" data-state="unclicked" src="assets/img/coffee.jpg">
-                                        <h3 class="drinks caption" data-name="Coffee" data-state="unclicked" data-type="caption" id="captionCoffee">Coffee Bar</h3>
-                                    </div>
-                                    <div class="five columns thumbnail text-center">
-                                        <img class="drinks preference-images img-responsive" id="Brewery" data-name="Brewery" data-state="unclicked" src="assets/img/brewery.jpg">
-                                        <h3 class="drinks caption" data-name="Brewery" data-state="unclicked" data-type="caption" id="captionBrewery">Brewery</h3>
+                                    <div class="text-center twelve columns">
+                                     <button class=" btn btn-site btn-lg pref-btn"><a style="color: inherit; text-decoration: none;" href="preferences.html">Go to Meet up Page</a></button>
                                     </div>
                             </div>
-                            <div class="twelve columns text-">
-                                <h5>Events</h5>
-                                    <div class="five columns thumbnail text-center">
-                                        <img class="events preference-images img-responsive" id="Country" data-name="Country" data-state="unclicked" src="assets/img/country.jpg">
-                                        <h3 class="events caption" data-name="Country" data-state="unclicked" data-type="caption" id="captionCountry">Country</h3>
-                                    </div>
-                                    <div class="five columns thumbnail text-center">
-                                        <img class="events preference-images img-responsive" id="Sports" data-name="Sports" data-state="unclicked" src="assets/img/sports.jpeg">
-                                        <h3 class="events caption" data-name="Sports" data-state="unclicked" data-type="caption" id="captionSports">Sports</h3>
-                                    </div>
-                            </div>
+                          
+
+                            <div class=" text-center twelve columns text-" style="padding-top: 80px;">
+
+                                     <button class="btn btn-site btn-lg pref-btn"><a style="color: inherit; text-decoration: none;" href="/main">Create a New Meet Up</a></button>
+                                      <button class="btn btn-site btn-lg pref-btn"><a style="color: inherit; text-decoration: none;" href="/main">Be a loner</a></button>
+                            </div>    
+      
                             
                             <br/>
                             
-                            <button class="btn btn-site btn-lg pref-btn"><a style="color: inherit; text-decoration: none;" href="preferences.html">New Search</a></button>
+                           
 
                         </div>
-                        <br>
-                        <br>
-                        <br>
-                        <div class="twelve columns">
+                       
+    
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+              {{!-- <div class="twelve columns">
                             <h4>Feedback</h4>
                             <hr>
 
@@ -149,11 +144,4 @@
                                 <input class="button-primary" type="submit" value="Submit">
                             </form>
 
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                        </div> --}}
